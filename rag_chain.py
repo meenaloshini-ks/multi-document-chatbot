@@ -1,4 +1,4 @@
-from langchain_ollama import ChatOllama
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from vector_store import get_vector_store
@@ -16,10 +16,16 @@ Question: {question}
 
 Answer:"""
 
+
 def get_rag_chain():
     vector_store = get_vector_store()
     retriever = vector_store.as_retriever(search_kwargs={"k": 3})
-    llm = ChatOllama(model="llama3.2", temperature=0)
+
+    llm = ChatGroq(
+        model="openai/gpt-oss-120b",
+        temperature=0
+    )
+
     prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
 
     def answer_question(query: str, chat_history: list[dict] = None):
